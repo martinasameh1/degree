@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول مسابقة - المرحلة الابتدائية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(74, 144, 226, 0.1) 0%, transparent 40%);
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 10px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '🏆';
+            position: absolute;
+            top: -20px;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 50px;
+            opacity: 0.2;
+            animation: trophyFloat 4s infinite ease-in-out;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #FFD700, #FFEC8B, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titlePulse 2s infinite alternate;
+            line-height: 1.3;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .subtitle {
+            color: #FFEC8B;
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            position: relative;
+            margin: 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #FF416C, #FF4B2B, #FFD700, #4A90E2, #6a11cb);
+            background-size: 300% 100%;
+            animation: gradientFlow 3s linear infinite;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(to right, #4A90E2, #63B8FF);
+            color: white;
+            padding: 20px 15px;
+            font-size: 1.3rem;
+            text-align: center;
+            border: none;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child {
+            border-top-right-radius: 10px;
+        }
+
+        th:last-child {
+            border-top-left-radius: 10px;
+        }
+
+        th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 10%;
+            width: 80%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        td {
+            padding: 20px 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        tr {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        tr:hover {
+            background-color: rgba(74, 144, 226, 0.1);
+            transform: translateX(-5px);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+
+        tr:hover:nth-child(even) {
+            background-color: rgba(255, 215, 0, 0.12);
+        }
+
+        .points-cell {
+            font-weight: bold;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .points-display {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.8rem;
+            box-shadow: 
+                0 8px 20px rgba(255, 165, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            animation: pointGlow 2.5s infinite alternate;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #FFA500;
+            transition: all 0.3s ease;
+        }
+
+        .points-display:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 
+                0 12px 25px rgba(255, 165, 0, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.8);
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            padding-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .player-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #4A90E2, #63B8FF);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-left: 10px;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+            border: 2px solid white;
+            position: relative;
+            z-index: 1;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        tr:hover .player-number {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.5);
+        }
+
+        /* إزالة التمييز عن الثلاثة الأوائل */
+        .rank-1 .player-number,
+        .rank-2 .player-number,
+        .rank-3 .player-number {
+            background: linear-gradient(135deg, #4A90E2, #63B8FF);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 1000px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .update-time {
+            color: #FFEC8B;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        @keyframes titlePulse {
+            0% { 
+                transform: scale(1); 
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5), 
+                            0 0 10px rgba(255, 215, 0, 0.3); 
+            }
+            100% { 
+                transform: scale(1.03); 
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 
+                            0 0 20px rgba(255, 215, 0, 0.5), 
+                            0 0 30px rgba(255, 215, 0, 0.3); 
+            }
+        }
+
+        @keyframes pointGlow {
+            0% { 
+                box-shadow: 0 8px 20px rgba(255, 165, 0, 0.4),
+                           inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            }
+            100% { 
+                box-shadow: 0 8px 25px rgba(255, 165, 0, 0.7),
+                           0 0 15px rgba(255, 215, 0, 0.4),
+                           inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        @keyframes trophyFloat {
+            0% { transform: translateX(50%) translateY(0px) rotate(0deg); }
+            50% { transform: translateX(50%) translateY(-10px) rotate(5deg); }
+            100% { transform: translateX(50%) translateY(0px) rotate(0deg); }
+        }
+
+        /* تحسينات للشاشات الصغيرة جداً */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                margin: 5px auto;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 8px;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                padding: 8px 18px;
+            }
+            
+            .stats-bar {
+                padding: 12px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .table-container {
+                padding: 15px;
+                margin: 0;
+                border-radius: 15px;
+            }
+            
+            th {
+                padding: 16px 8px;
+                font-size: 1.1rem;
+            }
+            
+            td {
+                padding: 16px 8px;
+                font-size: 1rem;
+            }
+            
+            .points-display {
+                width: 55px;
+                height: 55px;
+                font-size: 1.5rem;
+            }
+            
+            .player-number {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+            
+            .player-name {
+                font-size: 1.1rem;
+                gap: 8px;
+            }
+        }
+
+        /* تحسينات للشاشات المتوسطة */
+        @media (min-width: 481px) and (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            th {
+                font-size: 1.2rem;
+                padding: 18px 12px;
+            }
+            
+            td {
+                padding: 18px 12px;
+                font-size: 1.1rem;
+            }
+            
+            .points-display {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6rem;
+            }
+        }
+
+        /* تحسينات للشاشات الكبيرة */
+        @media (min-width: 769px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.5rem;
+                padding: 12px 30px;
+            }
+            
+            .table-container {
+                padding: 25px;
+                border-radius: 25px;
+            }
+            
+            th {
+                font-size: 1.5rem;
+                padding: 22px 20px;
+            }
+            
+            td {
+                padding: 22px 20px;
+                font-size: 1.3rem;
+            }
+            
+            .points-display {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            
+            .player-number {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .player-name {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 جدول النقاط 🏆</h1>
+            <p class="subtitle">الصف الخامس والسادس الابتدائي</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="totalPlayers">14</div>
+                <div class="stat-label">إجمالي الطلاب</div>
+            </div>
+            
+            
+            <div class="stat-item">
+                <div class="stat-value" id="topScore">210</div>
+                <div class="stat-label">أعلى نقاط</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الترتيب</th>
+                        <th>الاسم</th>
+                        <th>النقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="playersTable">
+                    <!-- سيتم إضافة اللاعبين تلقائياً حسب الترتيب -->
+                </tbody>
+            </table>
+        </div>
+
+        
+    </div>
+
+    <script>
+        // بيانات اللاعبين مع نقاطهم (يمكنك تعديلها فقط من هنا)
+        const playersData = [
+            { id: 1, name: "روبن", points: 10 },
+            { id: 2, name: "ميلى جون", points: 100 },
+            { id: 3, name: "يوسف مينا", points: 130 },
+            { id: 4, name: "جوفانى جرجس حنا", points: 90 },
+            { id: 5, name: "فابيان حنا", points: 130 },
+            { id: 6, name: "كاراس امير", points: 90 },
+            { id: 7, name: "مكاريوس امير", points: 90 },
+            { id: 8, name: "كيرلس ياسر", points: 80 },
+            { id: 9, name: "بافلى رجائى", points: 10 },
+            { id: 10, name: "جوفانى جرجس", points: 70 },
+            { id: 11, name: "محب وجيه", points: 130 },
+            { id: 12, name: "شنودة ميلاد", points: 210 },
+            { id: 13, name: "ابانوب رضا", points: 40 },
+            { id: 14, name: "سوسنة ايمن", points: 80 },
+            { id: 15, name: " كاراس ميشيل", points: 40 },
+            { id: 16, name: " روجينا ايمن ", points: 90 },
+            { id: 16, name: " يؤانا مجدى ", points: 80 },
+            { id: 17, name: " مارلى روبيرت ", points: 70 },
+            { id: 18, name: " جونير ميشيل", points: 20 }
+        ];
+
+        // دالة لعرض اللاعبين مرتبين حسب النقاط
+        function displayPlayers() {
+            // ترتيب اللاعبين تنازلياً حسب النقاط
+            const sortedPlayers = [...playersData].sort((a, b) => b.points - a.points);
+            
+            const tableBody = document.getElementById('playersTable');
+            tableBody.innerHTML = '';
+            
+            let totalPoints = 0;
+            let topScore = 0;
+            
+            sortedPlayers.forEach((player, index) => {
+                totalPoints += player.points;
+                if (player.points > topScore) topScore = player.points;
+                
+                const row = document.createElement('tr');
+                
+                // إضافة كلاسات خاصة للثلاثة الأوائل (يتم إضافة الكلاس فقط، ولكن التصميم موحد للجميع)
+                if (index < 3) {
+                    row.classList.add(`rank-${index + 1}`);
+                }
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="player-number">${index + 1}</div>
+                    </td>
+                    <td>
+                        <div class="player-name">
+                            ${player.name}
+                        </div>
+                    </td>
+                    <td class="points-cell">
+                        <div class="points-display" id="points${player.id}">${player.points}</div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // تحديث الإحصائيات
+            updateStats(totalPoints, topScore);
+            
+            // تحديث وقت التحديث
+            updateTime();
+            
+            // إضافة تأثيرات ظهور للصفوف
+            animateRows();
+        }
+        
+        // دالة لتحديث الإحصائيات
+        function updateStats(totalPoints, topScore) {
+            document.getElementById('totalPlayers').textContent = playersData.length;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('topScore').textContent = topScore;
+        }
+        
+        // دالة لتحديث وقت التحديث
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('updateTime').textContent = `${dateString} - ${timeString}`;
+        }
+        
+        // دالة لإضافة تأثيرات ظهور للصفوف
+        function animateRows() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(50px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'all 0.5s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        }
+
+        // تحديث الجدول عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', displayPlayers);
+        
+        // دالة لتحديث نقاط اللاعب (يمكنك استخدام هذه الدالة لتحديث النقاط من مكان آخر)
+        function updatePlayerPoints(playerId, newPoints) {
+            const player = playersData.find(p => p.id === playerId);
+            if (player) {
+                player.points = newPoints;
+                displayPlayers();
+            }
+        }
+        
+        // دالة لإضافة نقاط للاعب
+        function addPointsToPlayer(playerId, pointsToAdd) {
+            const player = playersData.find(p => p.id === playerId);
+            if (player) {
+                player.points += pointsToAdd;
+                displayPlayers();
+                return player.points;
+            }
+            return null;
+        }
+        
+        // دالة لتعيين نقاط جديدة للاعب
+        function setPlayerPoints(playerId, newPoints) {
+            const player = playersData.find(p => p.id === playerId);
+            if (player) {
+                player.points = newPoints;
+                displayPlayers();
+                return player.points;
+            }
+            return null;
+        }
+
+        // لجعل الدوال متاحة للاستخدام من خارج هذا الملف (اختياري)
+        window.updatePlayerPoints = updatePlayerPoints;
+        window.addPointsToPlayer = addPointsToPlayer;
+        window.setPlayerPoints = setPlayerPoints;
+        window.playersData = playersData;
+    </script>
+</body>
+</html>
